@@ -1,9 +1,22 @@
+<script lang="ts">
+  import { defineComponent } from 'vue'
+  export default defineComponent({
+    name: 'App',
+    data() {
+      return {
+        stringList: ['beatles', 'rollingstones', 'eminem', 'michaeljackson']
+      }
+    },
+  })
+</script>
+
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div id="app">
+    <h1>Demo Site!</h1>
+    <ul>
+      <li v-for="item in stringList" :key="item">{{ item }}</li>
+    </ul>
+  </div>
 </template>
 
 <style>
