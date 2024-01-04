@@ -1,11 +1,24 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import ListingView from '../views/ListingView.vue'
+import PlaceDetail from '../components/PlaceDetail.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'home',
     component: HomeView
+  },
+  {
+    path: '/listing',
+    name: 'listing',
+    component: ListingView
+  },
+  {
+    path: '/places/:id',
+    name: 'PlaceDetail',
+    component: PlaceDetail,
+    props: true,
   },
   {
     path: '/about',
