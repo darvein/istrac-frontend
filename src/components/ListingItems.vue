@@ -1,13 +1,17 @@
 <template>
   <div class="listing-items">
     <div v-for="(place, index) in places" :key="index" class="place-card">
-      <div class="card-image" v-if="place.photos.length > 0">
-        <img :src="place.photos[0].image_url" :alt="place.name" />
-      </div>
+      <router-link :to="{ name: 'PlaceDetail', params: { id: place.id } }" class="card-image-link">
+        <div class="card-image" v-if="place.photos.length > 0">
+          <img :src="place.photos[0].image_url" :alt="place.name" />
+          <div class="card-icons">
+            <span class="icon-comments">{{ place.commentsCount }} <i class="fas fa-comments"></i></span>
+            <span class="icon-likes">{{ place.likesCount }} <i class="fas fa-thumbs-up"></i></span>
+          </div>
+        </div>
+      </router-link>
       <div class="card-body">
         <h2 class="card-title">{{ place.name }}</h2>
-        <router-link :to="{ name: 'PlaceDetail', params: { id: place.id } }">[Ver Sitio]</router-link>
-        <p class="card-description">{{ place.description }}</p>
       </div>
     </div>
   </div>
@@ -40,7 +44,9 @@ export default defineComponent({
     // Fetch data from the API when the component is mounted
     onMounted(async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/tplaces/');
+        const baseUrl = process.env.VUE_APP_API_BASE_URL;
+        console.log(baseUrl);
+        const response = await axios.get(`${baseUrl}/api/tplaces/`);
         places.value = response.data;
       } catch (error) {
         console.error('There was an error fetching the places:', error);
@@ -56,42 +62,84 @@ export default defineComponent({
 
 <style scoped>
 .listing-items {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
+  padding: 20px;
 }
 
 .place-card {
+  background: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 300px; /* Fixed width or you can make it responsive */
+  display: flex;
+  flex-direction: column;
+}
+
+.card-image {
+  height: 200px; /* Set a fixed height for the image container */
+  overflow: hidden; /* Hide any overflow */
 }
 
 .card-image img {
-  width: 100%;
-  height: auto;
+  width: 100%; /* Full width of the container */
+  height: 100%; /* Full height of the container */
+  object-fit: cover; /* Cover the container while preserving aspect ratio */
   display: block;
 }
 
 .card-body {
-  padding: 15px;
-  text-align: center;
+  padding: 10px; /* Reduced padding */
+  text-align: left; /* Align text to the left */
+  position: relative; /* Position relative for potential absolute elements inside */
 }
 
 .card-title {
-  margin: 0;
-  font-size: 1.5em;
+  font-size: 1.0em; /* Smaller font size */
   font-weight: bold;
-  color: #333;
-  margin-bottom: 10px;
+  margin: 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Subtle text shadow for depth */
+  overflow: hidden; /* Ensure no overflow */
+  white-space: nowrap; /* No wrapping */
+  text-overflow: ellipsis; /* Add ellipsis for text overflow */
 }
 
-.card-description {
-  font-size: 1em;
-  color: #666;
-  line-height: 1.4;
+.card-image {
+  position: relative; /* Set the card-image to relative so we can position icons absolutely within it */
 }
+
+.card-icons {
+  position: absolute; /* Position the icons absolutely to the top-right of the card-image */
+  top: 10px; /* Spacing from the top */
+  right: 10px; /* Spacing from the right */
+  display: flex;
+}
+
+.icon-comments,
+.icon-likes {
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent background for better visibility */
+  border-radius: 10px; /* Rounded corners for the icon backgrounds */
+  padding: 5px 8px; /* Padding inside the icon backgrounds */
+  margin-left: 5px; /* Space between icons */
+  color: #333; /* Icon color */
+  font-size: 0.8em; /* Icon font size */
+}
+
+.icon-comments i,
+.icon-likes i {
+  margin-left: 5px; /* Space between icon and text */
+}
+
+/* Optional: Add some hover effects to the icons for interactivity */
+.icon-comments:hover,
+.icon-likes:hover {
+  color: #333;
+  cursor: pointer;
+}
+
+/* Ensure you have FontAwesome or similar for the icons */
 </style>

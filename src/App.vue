@@ -1,31 +1,29 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link> |
-    <router-link to="/listing">Listings</router-link>
-  </nav>
   <router-view/>
 </template>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  text-align: left;
+  color: #172431;
+  background-color: #f9f9fa; /* Facebook-like background color */
 }
 
-nav {
-  padding: 30px;
+/* You might also want to set some base font sizes, weights, and line heights */
+body {
+  font-size: 16px; /* Base font size */
+  font-weight: 400; /* Regular weight */
+  line-height: 1.6; /* Spacing for readability */
+  margin: 0px;
+  padding: 0px;
 }
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700; /* Bold weight for headings */
 }
 </style>

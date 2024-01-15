@@ -1,21 +1,31 @@
 <template>
-  <div class="listing">
-    <h1>Yo broki</h1>
-    <h2>aki la lista de lugares turisticos</h2>
+  <base-layout>
+    <template #header>
+    </template>
 
-    <listing-items></listing-items>
-  </div>
+    <template #sidebar>
+      <listing-filters></listing-filters>
+    </template>
+
+    <div class="listing">
+      <h2>Destinos Turisticos</h2>
+      <listing-items></listing-items>
+    </div>
+  </base-layout>
 </template>
-
 
 <script lang="ts">
   import {defineComponent} from 'vue';
-  import ListingItems from '../components/ListingItems.vue'
+  import BaseLayout from '@/components/BaseLayout.vue';
+  import ListingItems from '@/components/ListingItems.vue'
+  import ListingFilters from '@/components/ListingFilters.vue'
 
   export default defineComponent({
     name: 'ListingView',
     components: {
-      ListingItems
+      BaseLayout,
+      ListingItems,
+      ListingFilters,
     }
   });
 </script>

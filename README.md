@@ -27,3 +27,7 @@ yarn lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+### Color palette
+- https://www.color-hex.com/color-palette/1294

@@ -5,12 +5,12 @@ import PlaceDetail from '../components/PlaceDetail.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
+    path: '/home',
     name: 'home',
     component: HomeView
   },
   {
-    path: '/listing',
+    path: '/',
     name: 'listing',
     component: ListingView
   },
