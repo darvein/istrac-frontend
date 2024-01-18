@@ -3,9 +3,14 @@
     <template #header>
     </template>
 
+    <template #sidebar>
+      <listing-detail-options></listing-detail-options>
+    </template>
+
     <div class="place-detail" v-if="place">
       <div class="place-header">
         <h1 class="place-title">{{ place.name }}</h1>
+        <p>{{ place.description }}</p>
       </div>
       <div class="tabs">
         <button
@@ -18,10 +23,14 @@
         </button>
       </div>
       <div class="tab-content">
-        <div v-if="currentTab === 'Photos'" class="place-photos">
+        <div v-if="currentTab === 'Fotos'" class="place-photos">
           <div v-for="photo in place.photos" :key="photo.id" class="photo-card" @click="openPhoto(photo.image_url)">
             <img :src="photo.image_url" :alt="place.name" class="photo-image" />
           </div>
+        </div>
+        <div v-if="currentTab === 'Information'" class="place-information">
+          <h3>Descripcion</h3>
+          <p>{{ place.description }} </p>
         </div>
         <!-- Add content for other tabs here -->
       </div>
@@ -37,9 +46,13 @@
   </base-layout>
 </template>
 
+
+
+
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
 import BaseLayout from '@/components/BaseLayout.vue';
+import ListingDetailOptions from '@/components/ListingDetailOptions.vue';
 import axios from 'axios';
 
 interface Photo {
@@ -66,11 +79,12 @@ export default defineComponent({
   },
   components: {
     BaseLayout,
+    ListingDetailOptions,
   },
   setup(props) {
     const place = ref<Place | null>(null);
-    const currentTab = ref('Photos');
-    const tabs = ['Photos', 'Videos', 'Comments', 'Information'];
+    const currentTab = ref('Fotos');
+    const tabs = ['Fotos', 'Videos', 'Information'];
     const selectedPhoto = ref<string | null>(null);
 
     const openPhoto = (url: string) => {
@@ -100,19 +114,29 @@ export default defineComponent({
 
 <style scoped>
 .place-detail {
-  max-width: 800px;
   margin: auto;
-  padding: 20px;
+  padding: 10px;
 }
 
 .place-header {
-  text-align: center;
-  margin-bottom: 30px;
+  display: flex; /* Use flexbox for layout */
+  align-items: center; /* Vertically center the items */
+  padding: 10px; /* Add some padding for spacing */
+  margin-bottom: 20px;
 }
 
 .place-title {
-  font-size: 2.5em;
-  margin-bottom: 0.5em;
+  margin: 0; /* Remove margin from the title */
+  font-weight: 800;
+  font-size: 2em; /* Adjust the font size as needed */
+  flex: 0 0 auto;
+}
+
+.place-header p {
+  margin: 0 0 0 15px; /* Remove margin from the paragraph */
+  font-size: 1em; /* Adjust the font size as needed */
+  max-width: 60%;
+  flex: 1;
 }
 
 .place-description {
@@ -122,22 +146,28 @@ export default defineComponent({
 
 .place-photos {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); /* Flexible columns */
+  grid-auto-rows: auto; /* Auto-adjusting row sizes */
+  gap: 10px;
 }
 
 .photo-card {
+  align-items: center; /* Aligns items vertically in the center */
+  justify-content: center; 
+
   border: 1px solid #ddd;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  aspect-ratio: 16 / 9; /* Example ratio, adjust as needed */
 }
 
 .photo-image {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover; /* Ensures image covers the card completely */
   display: block;
-  transition: transform 0.3s ease;
 }
 
 .photo-card:hover .photo-image {
@@ -146,8 +176,9 @@ export default defineComponent({
 
 .tabs {
   display: flex;
-  justify-content: center;
+  justify-content: left;
   margin-bottom: 20px;
+  border-bottom: 1px solid #3c95d0;
 }
 
 .tabs button {
@@ -165,8 +196,8 @@ export default defineComponent({
 }
 
 .tabs button.active {
-  border-bottom-color: #007bff;
   color: #007bff;
+  border-bottom: 1px solid #fbfdfe;
 }
 
 .tab-content {

@@ -49,6 +49,7 @@ export default {
 
 .filter-item i {
   margin-right: 8px;
+  color: #2f3132;
 }
 
 .filter-item:hover {

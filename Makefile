@@ -2,6 +2,6 @@ up-local:
 	@echo "Starting application..."
 	yarn serve:local
 
-up-develop:
-	@echo "Starting application..."
-	yarn serve:develop
+build-develop:
+	@echo "Build application..."
+	yarn run build:develop

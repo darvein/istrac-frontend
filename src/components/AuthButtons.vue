@@ -1,7 +1,5 @@
 <template>
   <div class="auth-buttons">
-    <button class="btn-login">Login</button>
-    <button class="btn-signup">Signup</button>
   </div>
 </template>
 

@@ -5,6 +5,8 @@ module.exports = defineConfig({
     allowedHosts: [
       'localhost',
       'istrac.nextbrave.net',
+      'www.rutazz.com',
+      'rutazz.com',
     ],
   },
 })

@@ -1,12 +1,11 @@
 <template>
   <div class="grid-container">
     <header class="header">
-      <img width="3.5%" src="/logo.png" alt="Logo" class="logo">
+      <img width="3%" src="/logo.png" alt="Logo" class="logo">
+      <h1>Rutazz</h1>
       <auth-buttons></auth-buttons>
     </header>
-    <aside class="sidebar">
-      <slot name="sidebar"></slot>
-    </aside>
+    <aside class="sidebar"><slot name="sidebar"></slot></aside>
     <main class="content">
       <slot></slot>
     </main>
@@ -14,7 +13,7 @@
       <a href=#>Inicio</a> | 
       <a href=#>Nosotros</a> | 
       <a href=#>Contacto</a>
-      <p>© 2023 Istrac. Todos los derechos reservados.</p>
+      <p>© 2023 Rutazz. Todos los derechos reservados.</p>
     </footer>
   </div>
 </template>
@@ -33,20 +32,21 @@
 
 .header {
   grid-area: header;
-  background-color: #fff; /* Solid dark blue background */
+  background-color: #38bfc8; /* Solid dark blue background */
+  background: linear-gradient(to bottom, #4aa0dc, #1a7eb9);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   margin: 0; /* Ensure it fits edge to edge */
   padding: 0; /* Comfortable padding inside the header */
   width: 100%; /* Full width */
   display: flex; /* Flexbox for layout */
   align-items: center; /* Vertically center content */
-  justify-content: space-between; /* This will push the AuthButtons to the right */
 }
 
 .header h1 {
-  margin: 10px;
-  font-weight: 400;
-  margin-left: 10px;
+  margin: 0 0 0 15px;
+  font-weight: 800;
+  color: #fff;
+  font-size: 2.5em;
 }
 
 .sidebar {

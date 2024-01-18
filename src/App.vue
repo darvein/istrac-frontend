@@ -11,7 +11,7 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: left;
   color: #172431;
-  background-color: #f9f9fa; /* Facebook-like background color */
+  background-color: #fbfdfe; /* Facebook-like background color */
 }
 
 /* You might also want to set some base font sizes, weights, and line heights */

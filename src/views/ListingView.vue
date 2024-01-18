@@ -1,7 +1,6 @@
 <template>
   <base-layout>
-    <template #header>
-    </template>
+    <template #header></template>
 
     <template #sidebar>
       <listing-filters></listing-filters>
@@ -11,6 +10,7 @@
       <h2>Destinos Turisticos</h2>
       <listing-items></listing-items>
     </div>
+
   </base-layout>
 </template>
 

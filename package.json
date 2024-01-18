@@ -6,6 +6,7 @@
     "serve:local": "vue-cli-service serve --host 0.0.0.0 --mode local",
     "serve:develop": "vue-cli-service serve --host 0.0.0.0 --mode develop",
     "build": "vue-cli-service build",
+    "build:develop": "vue-cli-service build --mode develop",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },
