@@ -1,7 +1,7 @@
 <template>
   <div class="grid-container">
     <header class="header">
-      <img width="3%" src="/logo.png" alt="Logo" class="logo">
+      <img src="/logo.png" alt="Logo" class="logo">
       <h1>Rutazz</h1>
       <auth-buttons></auth-buttons>
     </header>
@@ -66,11 +66,10 @@
  .footer {
    grid-area: footer;
    text-align: center;
-   /* Add your footer styling here */
  }
 
  .logo {
-   /* Style your logo here */
+   width: 70px;
  }
  </style>
 

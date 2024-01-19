@@ -1,5 +1,8 @@
 <template>
   <div class="listing-items">
+    <div class="card-image" v-if="places.length <= 0">
+      <h3>No hay resultados</h3>
+    </div>
     <div v-for="(place, index) in places" :key="index" class="place-card">
       <router-link :to="{ name: 'PlaceDetail', params: { id: place.id } }" class="card-image-link">
         <div class="card-image" v-if="place.photos.length > 0">
@@ -18,7 +21,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue';
+import { defineComponent, onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import axios from 'axios';
 
 // Define the structure of the photo using an interface
@@ -40,19 +44,32 @@ export default defineComponent({
   name: 'ListingItems',
   setup() {
     const places = ref<Place[]>([]);
+    const route = useRoute();
 
-    // Fetch data from the API when the component is mounted
-    onMounted(async () => {
+    // Method to fetch places based on the city slug
+    const fetchPlaces = async (citySlug?: string) => {
       try {
         const baseUrl = process.env.VUE_APP_API_BASE_URL;
-        console.log(baseUrl);
-        const response = await axios.get(`${baseUrl}/api/tplaces/`);
+        const url = citySlug
+          ? `${baseUrl}/api/tplaces/?location=${citySlug}`
+          : `${baseUrl}/api/tplaces/`;
+        const response = await axios.get(url);
         places.value = response.data;
       } catch (error) {
         console.error('There was an error fetching the places:', error);
       }
+    };
+
+    // Fetch data from the API when the component is mounted
+    onMounted(async () => {
+      fetchPlaces(route.params.slug as string | undefined);
     });
 
+    watch(() => route.params.city, (newSlug, oldSlug) => {
+      if (newSlug !== oldSlug) {
+        fetchPlaces(newSlug as string);
+      }
+    });
     return {
       places,
     };

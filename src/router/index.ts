@@ -12,7 +12,14 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'listing',
-    component: ListingView
+    component: ListingView,
+    props: true,
+  },
+  {
+    path: '/places/:city',
+    name: 'PlacesFilter',
+    component: ListingView,
+    props: true,
   },
   {
     path: '/places/:id',
@@ -32,6 +39,7 @@ const routes: Array<RouteRecordRaw> = [
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
+  linkActiveClass: 'active', // Use 'active' as the class name for active links
   routes
 })
 

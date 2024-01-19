@@ -7,7 +7,6 @@
     </template>
 
     <div class="listing">
-      <h2>Destinos Turisticos</h2>
       <listing-items></listing-items>
     </div>
 

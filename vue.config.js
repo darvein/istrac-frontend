@@ -6,7 +6,6 @@ module.exports = defineConfig({
       'localhost',
       'istrac.nextbrave.net',
       'www.rutazz.com',
-      'rutazz.com',
     ],
   },
 })
