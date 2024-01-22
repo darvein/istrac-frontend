@@ -3,9 +3,8 @@ module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {
     allowedHosts: [
-      'localhost',
-      'istrac.nextbrave.net',
-      'www.rutazz.com',
+      "localhost",
+      "www.rutazz.com",
     ],
   },
 })

@@ -1,18 +1,20 @@
 <template>
   <div class="grid-container">
     <header class="header">
-      <img src="/logo.png" alt="Logo" class="logo">
-      <h1>Rutazz</h1>
-      <auth-buttons></auth-buttons>
+
+      <button v-show="isMobile" @click="toggleSidebar" class="hamburger-btn">
+        <i class="fas fa-bars"></i>
+      </button>
+      <router-link :to="{ name: 'listing' }"> <h1>Rutazz</h1> <auth-buttons></auth-buttons> </router-link>
     </header>
-    <aside class="sidebar"><slot name="sidebar"></slot></aside>
-    <main class="content">
+    <aside class="sidebar" v-show="isMobile ? showSidebar : true">
+      <slot name="sidebar"></slot>
+    </aside>
+    <main class="content" v-show="!showSidebar">
       <slot></slot>
     </main>
-    <footer class="footer">
-      <a href=#>Inicio</a> | 
-      <a href=#>Nosotros</a> | 
-      <a href=#>Contacto</a>
+    <footer class="footer" v-show="!showSidebar">
+      <a href=#>Inicio</a> | <a href=#>Nosotros</a> | <a href=#>Contacto</a>
       <p>© 2023 Rutazz. Todos los derechos reservados.</p>
     </footer>
   </div>
@@ -21,20 +23,55 @@
  <style scoped>
 .grid-container {
   display: grid;
-  grid-template-columns: 0.7fr 4.3fr; /* Sidebar takes 1 fraction, content takes 4 fractions */
-  grid-template-rows: auto 1fr auto; /* Header and footer size to content, middle row takes remaining space */
+  grid-template-columns: 0.7fr 4.3fr;
+  grid-template-rows: auto 1fr auto;
   grid-template-areas:
     "header header"
     "sidebar content"
     "footer footer";
-  min-height: 100vh; /* Full viewport height */
+  min-height: 100vh;
+}
+
+.sidebar {
+  grid-area: sidebar;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+  margin: 10px 0 0 0;
+}
+
+/* Styles for mobile */
+@media (max-width: 768px) {
+   .grid-container {
+     grid-template-columns: 1fr;
+     grid-template-areas:
+       "header"
+       "content"
+       "footer";
+   }
+
+  .sidebar {
+    position: absolute; /* Position the sidebar over the content */
+    top: 0; /* Align the top of the sidebar with the top of the viewport */
+    left: 0; /* Align the left of the sidebar with the left of the viewport */
+    width: 100%; /* Make the sidebar full width */
+    height: 100%; /* Make the sidebar full height */
+    z-index: 100; /* Ensure the sidebar is above other content */
+    padding: 10px;
+    margin: 0;
+    border-right: none; /* You might not need the border on mobile */
+    background: white; /* Assuming you want a white background */
+  }
+
+  .header {
+    position: relative; /* Make sure the header has a stacking context */
+    z-index: 101; /* Ensure the header is above the sidebar */
+  }
 }
 
 .header {
   grid-area: header;
-  background-color: #38bfc8; /* Solid dark blue background */
-  background: linear-gradient(to bottom, #4aa0dc, #1a7eb9);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  background-color: #1a7eb9; /* Solid dark blue background */
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5);
   margin: 0; /* Ensure it fits edge to edge */
   padding: 0; /* Comfortable padding inside the header */
   width: 100%; /* Full width */
@@ -49,37 +86,105 @@
   font-size: 2.5em;
 }
 
-.sidebar {
- grid-area: sidebar;
- padding: 10px; /* Add padding inside the sidebar */
- background-color: #fff; /* Example background color */
- border-right: 1px solid #ddd; /* Example border */
- margin: 10px 0 0 0;
+.header a {
+  text-decoration: none;
 }
 
- .content {
-   grid-area: content;
-   padding: 20px;
-   /* Add your content styling here */
- }
+.content {
+ grid-area: content;
+ padding: 20px;
+ /* Add your content styling here */
+}
 
- .footer {
-   grid-area: footer;
-   text-align: center;
- }
+.footer {
+ grid-area: footer;
+ text-align: center;
+}
 
- .logo {
-   width: 70px;
- }
+.logo {
+ width: 70px;
+}
+
+.hamburger-btn {
+  color: #fff;
+  font-size: 1.2em;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 30px;
+  width: 45px;
+}
+
+.hamburger-line {
+  display: block;
+  width: 100%;
+  height: 3px;
+  background-color: #333;
+  transition: all 0.3s ease;
+}
+
+.hamburger-btn:hover .hamburger-line {
+  background-color: #666;
+}
  </style>
 
-<script>
+<script lang="ts">
+import { watch } from 'vue';
+import { useRoute } from 'vue-router';
 import AuthButtons from '@/components/AuthButtons.vue';
+import { defineComponent, computed, ref, onMounted, onUnmounted } from 'vue';
 
-export default {
+export default defineComponent({
+  name: 'BaseComponent',
   components: {
     AuthButtons
   },
-  // rest of your component's script
-};
+  setup() {
+    const route = useRoute();
+
+    const isMobile = ref(window.innerWidth < 768);
+    const showSidebar = ref(false);
+
+    const updateWindowWidth = () => {
+      isMobile.value = window.innerWidth < 768;
+    };
+
+    const toggleSidebar = () => {
+      if (isMobile.value) {
+        showSidebar.value = !showSidebar.value;
+      }
+    };
+
+    const closeSidebar = () => {
+     if (isMobile.value) {
+       showSidebar.value = false;
+     }
+    };
+
+    onMounted(() => {
+      window.addEventListener('resize', updateWindowWidth);
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener('resize', updateWindowWidth);
+    });
+
+    watch(route, () => {
+      if (showSidebar.value) {
+        closeSidebar();
+      }
+    });
+
+    return {
+      isMobile,
+      showSidebar,
+      toggleSidebar,
+      closeSidebar,
+    };
+  },
+});
 </script>

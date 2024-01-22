@@ -1,32 +1,31 @@
 <template>
   <aside class="listing-filters">
-    <h2>Destinos Turísticos</h2>
+    <h2>Destinos</h2>
     
-    <div class="listing-filters-section">
+    <section class="listing-filters-section">
       <h3><i class="fas fa-map-marker-alt"></i> Lugares</h3>
       <ul class="filter-list">
-        <li class="filter-item-li" v-for="location in locations" :key="location.city">
-          <router-link :to="{ name: 'PlacesFilter', params: { city: location.slug } }">
-            <div class="filter-item">
-              <span>{{ location.city }}</span>
-            </div>
+        <li v-for="location in locations" :key="location.city">
+          <router-link class="filter-item" :to="{ name: 'PlacesFilter', params: { city: location.slug } }">
+            {{ location.city }}
           </router-link>
         </li>
       </ul>
-    </div>
+    </section>
 
-    <div class="listing-filters-section">
+
+    <section class="listing-filters-section">
       <h3><i class="fas fa-tags"></i> Categorias</h3>
       <ul class="filter-list">
-        <li class="filter-item-li" v-for="category in categories" :key="category.name">
-          <div class="filter-item">
-            <span>{{ category.name }}</span>
-          </div>
+        <li v-for="category in categories" :key="category.name">
+          <router-link class="filter-item" :to="{ name: 'CategoryFilter', params: { name: category.name } }">
+            {{ category.name }}
+          </router-link>
         </li>
       </ul>
-    </div>
+    </section>
 
-    <div class="listing-filters-section">
+    <section class="listing-filters-section">
       <h3>Filtros</h3>
       <ul class="filter-list">
         <li class="filter-item">
@@ -38,7 +37,7 @@
           <span>More Filters</span>
         </li>
       </ul>
-    </div>
+    </section>
   </aside>
 </template>
 
@@ -67,20 +66,16 @@ export default defineComponent({
     const categories = ref<Category[]>([]);
 
     onMounted(async () => {
+      const baseUrl = process.env.VUE_APP_API_BASE_URL;
       try {
-        const baseUrl = process.env.VUE_APP_API_BASE_URL;
-        const response = await axios.get(`${baseUrl}/api/locations/`);
-        locations.value = response.data;
+        const [locationResponse, categoryResponse] = await Promise.all([
+          axios.get(`${baseUrl}/api/locations/`),
+          axios.get(`${baseUrl}/api/categories/`)
+        ]);
+        locations.value = locationResponse.data;
+        categories.value = categoryResponse.data;
       } catch (error) {
-        console.error('There was an error fetching the locations:', error);
-      }
-
-      try {
-        const baseUrl = process.env.VUE_APP_API_BASE_URL;
-        const response = await axios.get(`${baseUrl}/api/categories/`);
-        categories.value = response.data;
-      } catch (error) {
-        console.error('There was an error fetching the categories:', error);
+        console.error('There was an error fetching data:', error);
       }
     });
 
@@ -108,65 +103,60 @@ export default defineComponent({
 }
 
 .filter-item {
-  display: flex;
-  align-items: center;
-  padding: 5px 20px;
-  cursor: pointer;
-}
-
-.filter-item-li .active {
- color: #1d2124;
- font-weight: bold;
- text-decoration: none;
-}
-
-.filter-item i {
-  margin-right: 8px;
-  color: #2f3132;
-}
-
-.filter-item:hover {
-  background-color: #f0f2f5;
-}
-
-h2 {
-  font-size: 1.2em;
-  color: #333;
-  padding: 0.5em 0;
-  margin: 0;
-}
-
-h3 {
-  font-size: 1em;
-  color: #333;
-  padding: 0.5em 0;
-  margin-bottom: 0em;
-}
-
-.filter-item span {
-  text-decoration: none;
+  text-decoration: none; /* Removes the underline */
   color: #337ab7; /* Bootstrap primary color for links */
+  display: block; /* Makes the link fill the container */
+  padding: 5px 20px;
   transition: color 0.3s ease;
 }
 
-.filter-item span:hover {
+.filter-item:hover {
   color: #23527c; /* A darker shade for hover state */
+  background-color: #f0f2f5;
 }
 
-
-.filter-item a {
- text-decoration: none; /* Removes the underline */
- color: inherit; /* Inherits the color from the parent */
- display: block; /* Makes the link fill the container */
-}
-
-/* Style for the active router-link */
-.filter-item .router-link-active {
- color: #1d2124; /* A darker color for the active state */
- font-weight: bold; /* Optional: makes the active link bold */
+.router-link-active {
+  color: #1d2124; /* A darker color for the active state */
+  font-weight: bold; /* Makes the active link bold */
 }
 
 .filter-item span {
   vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+  .listing-filters-section {
+    border-bottom: none; /* Remove the border for a cleaner look on mobile */
+  }
+
+  .filter-list {
+    padding: 0;
+    margin: 0;
+  }
+
+  .filter-item {
+    text-decoration: none; /* Keeps the underline removed */
+    color: #333; /* Darker color for better readability */
+    display: flex; /* Use flexbox for centering and spacing */
+    align-items: center; /* Center items vertically */
+    justify-content: center; /* Center items horizontally */
+    padding: 15px; /* Larger padding for easier tapping */
+    margin: 10px 0; /* Add some margin between buttons */
+    background-color: #f7f7f7; /* Light background for the button */
+    border-radius: 8px; /* Rounded corners for a button-like appearance */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    transition: background-color 0.3s ease; /* Smooth background color transition */
+  }
+
+  .filter-item:hover {
+    background-color: #e9ecef; /* Slightly darker background on hover */
+    color: #23527c; /* A darker shade for hover state */
+  }
+
+  .router-link-active {
+    color: #fff; /* White text for the active state */
+    background-color: #007bff; /* Bootstrap primary color for the active state */
+    font-weight: bold; /* Keeps the active link bold */
+  }
 }
 </style>

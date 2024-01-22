@@ -9,7 +9,7 @@
 
     <div class="place-detail" v-if="place">
       <div class="place-header">
-        <h1 class="place-title">{{ place.name }}</h1>
+        <h2 class="place-title">{{ place.name }}</h2>
         <p>{{ place.description }}</p>
       </div>
       <div class="tabs">
@@ -24,7 +24,7 @@
       </div>
       <div class="tab-content">
         <div v-if="currentTab === 'Fotos'" class="place-photos">
-          <div v-for="photo in place.photos" :key="photo.id" class="photo-card" @click="openPhoto(photo.image_url)">
+          <div v-for="photo in place.photos" :key="photo.id" class="photo-card" @click="openPhoto(photo.original_url)">
             <img :src="photo.image_url" :alt="place.name" class="photo-image" />
           </div>
         </div>
@@ -47,71 +47,6 @@
 </template>
 
 
-
-
-<script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue';
-import BaseLayout from '@/components/BaseLayout.vue';
-import ListingDetailOptions from '@/components/ListingDetailOptions.vue';
-import axios from 'axios';
-
-interface Photo {
-  id: number;
-  image: string;
-  image_url: string;
-}
-
-interface Place {
-  id: number;
-  name: string;
-  description: string;
-  photos: Photo[];
-  // Add other properties like videos and comments if they exist
-}
-
-export default defineComponent({
-  name: 'PlaceDetail',
-  props: {
-    id: {
-      type: Number,
-      required: true,
-    },
-  },
-  components: {
-    BaseLayout,
-    ListingDetailOptions,
-  },
-  setup(props) {
-    const place = ref<Place | null>(null);
-    const currentTab = ref('Fotos');
-    const tabs = ['Fotos', 'Videos', 'Information'];
-    const selectedPhoto = ref<string | null>(null);
-
-    const openPhoto = (url: string) => {
-      selectedPhoto.value = url;
-    };
-
-    onMounted(async () => {
-      try {
-        const baseUrl = process.env.VUE_APP_API_BASE_URL;
-        const response = await axios.get(`${baseUrl}/api/tplaces/${props.id}`);
-        place.value = response.data;
-      } catch (error) {
-        console.error('There was an error fetching the place details:', error);
-      }
-    });
-
-    return {
-      place,
-      currentTab,
-      tabs,
-      selectedPhoto,
-      openPhoto,
-    };
-  },
-});
-</script>
-
 <style scoped>
 .place-detail {
   margin: auto;
@@ -128,20 +63,20 @@ export default defineComponent({
 .place-title {
   margin: 0; /* Remove margin from the title */
   font-weight: 800;
-  font-size: 2em; /* Adjust the font size as needed */
-  flex: 0 0 auto;
+  flex: none;
 }
 
 .place-header p {
   margin: 0 0 0 15px; /* Remove margin from the paragraph */
   font-size: 1em; /* Adjust the font size as needed */
   max-width: 60%;
-  flex: 1;
+  flex: none;
 }
 
 .place-description {
   font-size: 1.2em;
   color: #555;
+  flex: none;
 }
 
 .place-photos {
@@ -172,6 +107,7 @@ export default defineComponent({
 
 .photo-card:hover .photo-image {
   transform: scale(1.05);
+  cursor: pointer;
 }
 
 .tabs {
@@ -222,4 +158,133 @@ export default defineComponent({
   max-height: 90%;
   object-fit: contain;
 }
+
+
+@media (max-width: 768px) { /* Adjust the max-width as needed for your design */
+  .place-title {
+    margin: 0;
+  }
+
+  .place-header p {
+    margin: 0;
+    max-width: 100%;
+  }
+
+  .place-description {
+    color: #555;
+  }
+
+  .place-detail {
+    padding: 10px; /* Add padding for smaller screens */
+  }
+
+  .place-header {
+    text-align: center; /* Center the header on small screens */
+    display: block;
+  }
+
+  .place-title {
+    font-size: 24px; /* Adjust font size for smaller screens */
+  }
+
+  .tabs {
+    display: flex;
+    flex-wrap: wrap; /* Wrap tabs on smaller screens */
+    justify-content: center; /* Center tabs */
+    margin-bottom: 10px; /* Add some space below the tabs */
+  }
+
+  .tabs button {
+    flex: 1 1 auto; /* Allow buttons to grow and shrink */
+    margin: 5px; /* Add margin around buttons */
+    padding: 10px; /* Increase padding for better touch targets */
+  }
+
+  .tab-content {
+    /* Adjust tab content styles for mobile if necessary */
+  }
+
+  .place-photos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-auto-rows: auto;
+    gap: 10px;
+  }
+
+  .photo-card {
+    /* Adjust photo card styles for mobile if necessary */
+  }
+
+  .fullscreen-overlay {
+    /* Adjust fullscreen overlay styles for mobile if necessary */
+  }
+
+  .fullscreen-image {
+    width: 100%; /* Ensure the image is not larger than the screen */
+    height: auto; /* Maintain aspect ratio */
+  }
+}
 </style>
+
+<script lang="ts">
+import { defineComponent, onMounted, ref } from 'vue';
+import BaseLayout from '@/components/BaseLayout.vue';
+import ListingDetailOptions from '@/components/ListingDetailOptions.vue';
+import axios from 'axios';
+
+interface Photo {
+  id: number;
+  image: string;
+  image_url: string;
+  original_url: string;
+}
+
+interface Place {
+  id: number;
+  name: string;
+  description: string;
+  photos: Photo[];
+}
+
+export default defineComponent({
+  name: 'PlaceDetail',
+  props: {
+    id: {
+      type: Number,
+      required: true,
+    },
+  },
+  components: {
+    BaseLayout,
+    ListingDetailOptions,
+  },
+  setup(props) {
+    const place = ref<Place | null>(null);
+    const currentTab = ref('Fotos');
+    const tabs = ['Fotos', 'Videos', 'Information'];
+    const selectedPhoto = ref<string | null>(null);
+
+    const openPhoto = (url: string) => {
+      selectedPhoto.value = url;
+    };
+
+    onMounted(async () => {
+      try {
+        const baseUrl = process.env.VUE_APP_API_BASE_URL;
+        const response = await axios.get(`${baseUrl}/api/tplaces/${props.id}`);
+        place.value = response.data;
+      } catch (error) {
+        console.error('There was an error fetching the place details:', error);
+      }
+    });
+
+    return {
+      place,
+      currentTab,
+      tabs,
+      selectedPhoto,
+      openPhoto,
+    };
+  },
+});
+</script>

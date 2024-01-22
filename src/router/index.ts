@@ -22,6 +22,11 @@ const routes: Array<RouteRecordRaw> = [
     props: true,
   },
   {
+    path: '/listing',
+    name: 'CategoryFilter',
+    component: ListingView,
+  },
+  {
     path: '/places/:id',
     name: 'PlaceDetail',
     component: PlaceDetail,
@@ -39,7 +44,7 @@ const routes: Array<RouteRecordRaw> = [
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  linkActiveClass: 'active', // Use 'active' as the class name for active links
+  linkActiveClass: 'router-link-active', // This should match your CSS class
   routes
 })
 
