@@ -48,6 +48,7 @@ export default defineComponent({
       return store.getters.getPlacesBySlug(slug);
     });
 
+
     return {
       places,
     };

@@ -227,56 +227,47 @@
 </style>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue';
+import { defineComponent, computed, onMounted, ref } from 'vue'; // Import 'ref' here
 import BaseLayout from '@/components/BaseLayout.vue';
 import ListingDetailOptions from '@/components/ListingDetailOptions.vue';
-import axios from 'axios';
-
-interface Photo {
-  id: number;
-  image: string;
-  image_url: string;
-  original_url: string;
-}
-
-interface Place {
-  id: number;
-  name: string;
-  description: string;
-  photos: Photo[];
-}
+import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 
 export default defineComponent({
   name: 'PlaceDetail',
-  props: {
-    id: {
-      type: Number,
-      required: true,
-    },
-  },
   components: {
     BaseLayout,
     ListingDetailOptions,
   },
-  setup(props) {
-    const place = ref<Place | null>(null);
-    const currentTab = ref('Fotos');
+  setup() {
+    const store = useStore();
+    const route = useRoute();
+    const currentTab = ref('Fotos'); // 'ref' is now imported
     const tabs = ['Fotos', 'Videos', 'Information'];
-    const selectedPhoto = ref<string | null>(null);
+    const selectedPhoto = ref<string | null>(null); // 'ref' is now imported
+
+    // Fetch place details when the component is mounted
+    onMounted(() => {
+      // Convert the route param to a number safely
+      const placeId = Number(route.params.id);
+      if (!isNaN(placeId)) {
+        store.dispatch('fetchPlaceDetail', placeId);
+      }
+    });
+
+    // Use a computed property to access the place details from the Vuex store
+    const place = computed(() => {
+      // Convert the route param to a number safely
+      const placeId = Number(route.params.id);
+      if (!isNaN(placeId)) {
+        return store.getters.getPlaceDetail(placeId);
+      }
+      return null;
+    });
 
     const openPhoto = (url: string) => {
       selectedPhoto.value = url;
     };
-
-    onMounted(async () => {
-      try {
-        const baseUrl = process.env.VUE_APP_API_BASE_URL;
-        const response = await axios.get(`${baseUrl}/api/tplaces/${props.id}`);
-        place.value = response.data;
-      } catch (error) {
-        console.error('There was an error fetching the place details:', error);
-      }
-    });
 
     return {
       place,
