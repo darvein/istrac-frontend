@@ -8,8 +8,8 @@
         <div class="card-image" v-if="place.photos.length > 0">
           <img :src="place.photos[0].image_url" :alt="place.name" />
           <div class="card-icons">
-            <span class="icon-comments">{{ place.commentsCount }} <i class="fas fa-comments"></i></span>
-            <span class="icon-likes">{{ place.likesCount }} <i class="fas fa-thumbs-up"></i></span>
+            <span class="icon-comments">10<i class="fas fa-comments"></i></span>
+            <span class="icon-likes">15 <i class="fas fa-thumbs-up"></i></span>
           </div>
         </div>
       </router-link>
@@ -158,5 +158,4 @@ export default defineComponent({
   cursor: pointer;
 }
 
-/* Ensure you have FontAwesome or similar for the icons */
 </style>
