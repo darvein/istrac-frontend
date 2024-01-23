@@ -21,55 +21,33 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch } from 'vue';
+import { defineComponent, computed, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import axios from 'axios';
-
-// Define the structure of the photo using an interface
-interface Photo {
-  id: number;
-  image: string;
-  image_url: string;
-}
-
-// Define the structure of the place using an interface
-interface Place {
-  id: number;
-  name: string;
-  description: string;
-  photos: Photo[];
-}
+import { useStore } from 'vuex';
 
 export default defineComponent({
   name: 'ListingItems',
   setup() {
-    const places = ref<Place[]>([]);
+    const store = useStore();
     const route = useRoute();
 
-    // Method to fetch places based on the city slug
-    const fetchPlaces = async (citySlug?: string) => {
-      try {
-        const baseUrl = process.env.VUE_APP_API_BASE_URL;
-        const url = citySlug
-          ? `${baseUrl}/api/tplaces/?location=${citySlug}`
-          : `${baseUrl}/api/tplaces/`;
-        const response = await axios.get(url);
-        places.value = response.data;
-      } catch (error) {
-        console.error('There was an error fetching the places:', error);
-      }
-    };
-
-    // Fetch data from the API when the component is mounted
-    onMounted(async () => {
-      fetchPlaces(route.params.slug as string | undefined);
+    // Fetch places when the component is mounted
+    onMounted(() => {
+      store.dispatch('fetchPlaces', route.params.city as string || 'default');
     });
 
-    watch(() => route.params.city, (newSlug, oldSlug) => {
-      if (newSlug !== oldSlug) {
-        fetchPlaces(newSlug as string);
+    // Watch for changes in the route parameters and fetch new data
+    watch(() => route.params.city, (newCity, oldCity) => {
+      if (newCity !== oldCity) {
+        store.dispatch('fetchPlaces', newCity as string || 'default');
       }
     });
+
+    const places = computed(() => {
+      const slug = route.params.city as string || 'default';
+      return store.getters.getPlacesBySlug(slug);
+    });
+
     return {
       places,
     };
@@ -157,5 +135,4 @@ export default defineComponent({
   color: #333;
   cursor: pointer;
 }
-
 </style>
