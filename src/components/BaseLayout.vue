@@ -1,11 +1,11 @@
 <template>
   <div class="grid-container">
     <header class="header">
-
       <button v-show="isMobile" @click="toggleSidebar" class="hamburger-btn">
         <i class="fas fa-bars"></i>
       </button>
-      <router-link :to="{ name: 'listing' }"> <h1>Rutazz</h1> <auth-buttons></auth-buttons> </router-link>
+      <router-link :to="{ name: 'listing' }"><h1>Rutazz</h1></router-link>
+      <auth-buttons></auth-buttons>
     </header>
     <aside class="sidebar" v-show="isMobile ? showSidebar : true">
       <slot name="sidebar"></slot>
@@ -15,7 +15,7 @@
     </main>
     <footer class="footer" v-show="!showSidebar">
       <a href=#>Inicio</a> | <a href=#>Nosotros</a> | <a href=#>Contacto</a>
-      <p>© 2023 Rutazz. Todos los derechos reservados.</p>
+      <p>© 2024 Rutazz. Todos los derechos reservados.</p>
     </footer>
   </div>
 </template>
@@ -136,7 +136,7 @@
 import { watch } from 'vue';
 import { useRoute } from 'vue-router';
 import AuthButtons from '@/components/AuthButtons.vue';
-import { defineComponent, computed, ref, onMounted, onUnmounted } from 'vue';
+import { defineComponent, ref, onMounted, onUnmounted } from 'vue';
 
 export default defineComponent({
   name: 'BaseComponent',
@@ -148,6 +148,7 @@ export default defineComponent({
 
     const isMobile = ref(window.innerWidth < 768);
     const showSidebar = ref(false);
+
 
     const updateWindowWidth = () => {
       isMobile.value = window.innerWidth < 768;

@@ -1,9 +1,13 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import ListingView from '../views/ListingView.vue'
-import PlaceDetail from '../components/PlaceDetail.vue';
+import { getAuth } from "firebase/auth";
 
-const routes: Array<RouteRecordRaw> = [
+import { createRouter, createWebHistory } from 'vue-router';
+import HomeView from '@/views/HomeView.vue'
+import ListingView from '@/views/ListingView.vue'
+import LoginView from '@/views/LoginView.vue'; // Update the import path as necessary
+import PlaceDetail from '@/components/PlaceDetail.vue';
+import UserProfileView from '@/views/UserProfileView.vue'; 
+
+const routes = [
   {
     path: '/home',
     name: 'home',
@@ -35,11 +39,19 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/about',
     name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: LoginView
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: UserProfileView,
+    meta: { requiresAuth: true }
+  },
 ]
 
 const router = createRouter({
@@ -47,5 +59,17 @@ const router = createRouter({
   linkActiveClass: 'router-link-active', // This should match your CSS class
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  const auth = getAuth();
+  const isAuthenticated = auth.currentUser; // Check if the user is authenticated
+
+  if (requiresAuth && !isAuthenticated) {
+    next('/login'); // Redirect to the login page if not authenticated
+  } else {
+    next(); // Proceed to route
+  }
+});
 
 export default router

@@ -24,20 +24,6 @@
         </li>
       </ul>
     </section>
-
-    <section class="listing-filters-section">
-      <h3>Filtros</h3>
-      <ul class="filter-list">
-        <li class="filter-item">
-          <i class="fas fa-search"></i>
-          <span>Search</span>
-        </li>
-        <li class="filter-item">
-          <i class="fas fa-sliders-h"></i>
-          <span>More Filters</span>
-        </li>
-      </ul>
-    </section>
   </aside>
 </template>
 

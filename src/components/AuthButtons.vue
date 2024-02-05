@@ -1,13 +1,18 @@
 <template>
   <div class="auth-buttons">
+    <router-link to="/login">Login</router-link>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'AuthButtons',
-  // You can add props, data, methods, etc. here as needed
-};
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+  name: 'LoginButton',
+
+  methods: {
+  }
+});
 </script>
 
 <style scoped>

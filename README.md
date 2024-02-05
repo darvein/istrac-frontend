@@ -1,4 +1,6 @@
-# frontend
+# Rutazz Frontend
+
+This app is writted with Vuejs 3 and Typescript for fun.
 
 ## Project setup
 ```
