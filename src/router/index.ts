@@ -1,11 +1,19 @@
-import { getAuth } from "firebase/auth";
-
+import { getAuth, signOut } from "firebase/auth";
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '@/views/HomeView.vue'
 import ListingView from '@/views/ListingView.vue'
 import LoginView from '@/views/LoginView.vue'; // Update the import path as necessary
 import PlaceDetail from '@/components/PlaceDetail.vue';
 import UserProfileView from '@/views/UserProfileView.vue'; 
+
+import { RouteLocationNormalized, NavigationGuardNext } from 'vue-router';
+const LogoutComponent = {
+  template: '<div></div>', // Dummy component, no real template needed
+  beforeRouteEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
+    const auth = getAuth();
+    signOut(auth).then(() => next('/login')).catch(() => next('/login'));
+  }
+};
 
 const routes = [
   {
@@ -52,6 +60,11 @@ const routes = [
     component: UserProfileView,
     meta: { requiresAuth: true }
   },
+  {
+    path: '/logout',
+    name: 'Logout',
+    component: LogoutComponent
+  },
 ]
 
 const router = createRouter({
@@ -63,12 +76,15 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   const auth = getAuth();
-  const isAuthenticated = auth.currentUser; // Check if the user is authenticated
+  const isAuthenticated = auth.currentUser;
+  const goingToLoginPage = to.path === '/login';
 
   if (requiresAuth && !isAuthenticated) {
-    next('/login'); // Redirect to the login page if not authenticated
+    next('/login');
+  } else if(goingToLoginPage && isAuthenticated) {
+    next('/profile')
   } else {
-    next(); // Proceed to route
+    next();
   }
 });
 

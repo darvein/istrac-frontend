@@ -1,17 +1,27 @@
 <template>
-  <div class="login-page">
-    <!-- Your login form component -->
-    <email-password-login />
-  </div>
+  <base-layout>
+    <template #header></template>
+
+    <template #sidebar>
+      sidebar
+    </template>
+
+    <div class="login-page">
+      <email-password-login />
+    </div>
+
+  </base-layout>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import EmailPasswordLogin from '@/components/EmailPasswordLogin.vue'; // Update the import path as necessary
+import BaseLayout from '@/components/BaseLayout.vue';
+import EmailPasswordLogin from '@/components/EmailPasswordLogin.vue'; 
 
 export default defineComponent({
   name: 'LoginView',
   components: {
+    BaseLayout,
     EmailPasswordLogin
   }
 });

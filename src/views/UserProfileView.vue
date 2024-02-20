@@ -3,7 +3,7 @@
     <template #header></template>
 
     <template #sidebar>
-      hello
+      sidebar
     </template>
 
     <div class="listing">
@@ -15,11 +15,13 @@
 
 <script lang="ts">
   import {defineComponent} from 'vue';
+  import BaseLayout from '@/components/BaseLayout.vue';
   import ProfilePage from '@/components/ProfilePage.vue'
 
   export default defineComponent({
     name: 'UserProfileView',
     components: {
+      BaseLayout,
       ProfilePage,
     }
   });
