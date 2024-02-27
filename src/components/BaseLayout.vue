@@ -39,7 +39,7 @@
   margin: 10px 0 0 0;
 }
 
-/* Styles for mobile */
+
 @media (max-width: 768px) {
    .grid-container {
      grid-template-columns: 1fr;
@@ -50,33 +50,33 @@
    }
 
   .sidebar {
-    position: absolute; /* Position the sidebar over the content */
-    top: 0; /* Align the top of the sidebar with the top of the viewport */
-    left: 0; /* Align the left of the sidebar with the left of the viewport */
-    width: 100%; /* Make the sidebar full width */
-    height: 100%; /* Make the sidebar full height */
-    z-index: 100; /* Ensure the sidebar is above other content */
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    z-index: 100; 
     padding: 10px;
     margin: 0;
-    border-right: none; /* You might not need the border on mobile */
-    background: white; /* Assuming you want a white background */
+    border-right: none; 
+    background: white; 
   }
 
   .header {
-    position: relative; /* Make sure the header has a stacking context */
-    z-index: 101; /* Ensure the header is above the sidebar */
+    position: relative; 
+    z-index: 101; 
   }
 }
 
 .header {
   grid-area: header;
-  background-color: #1a7eb9; /* Solid dark blue background */
+  background-color: #1a7eb9;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5);
-  margin: 0; /* Ensure it fits edge to edge */
-  padding: 0; /* Comfortable padding inside the header */
-  width: 100%; /* Full width */
-  display: flex; /* Flexbox for layout */
-  align-items: center; /* Vertically center content */
+  margin: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Adjust this */
 }
 
 .header h1 {
@@ -93,7 +93,7 @@
 .content {
  grid-area: content;
  padding: 20px;
- /* Add your content styling here */
+ 
 }
 
 .footer {

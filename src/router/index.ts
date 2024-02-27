@@ -5,6 +5,7 @@ import ListingView from '@/views/ListingView.vue'
 import LoginView from '@/views/LoginView.vue'; // Update the import path as necessary
 import PlaceDetail from '@/components/PlaceDetail.vue';
 import UserProfileView from '@/views/UserProfileView.vue'; 
+import CreateTPlaceForm from '@/views/CreateTplaceForm.vue';
 
 import { RouteLocationNormalized, NavigationGuardNext } from 'vue-router';
 const LogoutComponent = {
@@ -58,6 +59,12 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: UserProfileView,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/create-location',
+    name: 'CreateLocation',
+    component: CreateTPlaceForm,
     meta: { requiresAuth: true }
   },
   {

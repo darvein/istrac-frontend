@@ -1,9 +1,9 @@
 <!-- src/components/ProfilePage.vue -->
 <template>
   <div class="profile-page">
-    <h1>Profile</h1>
+    <h2>Perfil de Usuario</h2>
     <div v-if="user">
-      <p>Welcome, {{ user.displayName || user.email }}!</p>
+      <p>Bienvenido, {{ user.displayName || user.email }}!</p>
       <p>Email: {{ user.email }}</p>
       <img v-if="user.photoURL" :src="user.photoURL" alt="Profile photo" class="profile-photo">
     </div>
@@ -36,7 +36,6 @@ export default defineComponent({
 
 <style scoped>
 .profile-page {
-  max-width: 400px;
   margin: 0 auto;
   padding: 20px;
 }
